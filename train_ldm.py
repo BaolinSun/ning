@@ -68,8 +68,8 @@ optimizer = model.configure_optimizers()
 
 global_step = 0
 for epoch in range(opt.num_epochs):
-    model.train()
 
+    model.train()
     for batch_idx, batch in enumerate(train_dataloader):
         loss = model.training_step(batch=batch, batch_idx=batch_idx)
 
@@ -77,10 +77,26 @@ for epoch in range(opt.num_epochs):
         loss.backward()
         optimizer.step()
 
-        print(loss)
-
-        # if batch_idx % 10 == 0:
-        #     train_info = '[Train] Epoch: {}, mse_loss: {:.4f}'.format(epoch, loss.cpu().item())
-        #     logger.info(train_info)
+        if batch_idx % 10 == 0:
+            train_info = '[Train] Epoch: {}, mse_loss: {:.4f}'.format(epoch, loss.cpu().item())
+            logger.info(train_info)
 
         global_step += 1
+
+    model.eval()
+    save_config = dict()
+    with torch.no_grad():
+        for batch_idx, batch in enumerate(val_dataloader):
+            save_config['flag'] = True
+            save_config['split'] = 'val'
+            save_config['epoch'] = epoch
+            save_config['global_step'] = global_step
+            save_config['batch_index'] = batch_idx
+            save_config['imgdir'] = imgdir
+
+            loss, loss_dict = model.validation_step(batch=batch, batch_idx=batch_idx, save_config=save_config)
+
+            if batch_idx % 10 == 0:
+                val_info = '[Validation] Epoch: {}, mse_loss: {:.4f}, '.format(epoch, loss.cpu().item()) + str(loss_dict)
+                # val_info = '[Validation] Epoch: {}, mse_loss: '.format(epoch) + str(loss_dict_ema)
+                logger.info(val_info)

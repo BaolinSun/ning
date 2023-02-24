@@ -273,7 +273,6 @@ def save_img(log, save_config):
     # save_image(reconstructions, path)
 
 
-
 def save_ddpm_img(log, save_config):
 
     inputs = log['inputs'].detach()
@@ -296,5 +295,44 @@ def save_ddpm_img(log, save_config):
     path = save_config['imgdir']+'/denoise_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
         save_config['global_step'], save_config['epoch'], save_config['batch_index'])
     save_image(denoise_row, path)
+
+
+def save_ldm_img(log, save_config):
+
+    inputs = log['inputs'].detach()
+    reconstruction = log['reconstruction'].detach()
+    conditioning = log['conditioning'].detach()
+    diffusion_row = log['diffusion_row'].detach()
+    # denoise_row = log['denoise_row'].detach()
+    samples = log['samples'].detach()
+    samples_x0_quantized = log['samples_x0_quantized'].detach()
+
+    path = save_config['imgdir']+'/inputs_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(inputs, path)
+
+    path = save_config['imgdir']+'/reconstruction_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(reconstruction, path)
+
+    path = save_config['imgdir']+'/conditioning_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(conditioning, path)
+
+    path = save_config['imgdir']+'/diffusion_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(diffusion_row, path)
+
+    # path = save_config['imgdir']+'/denoise_row_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+    #     save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    # save_image(denoise_row, path)
+
+    path = save_config['imgdir']+'/samples_row_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(samples, path)
+
+    path = save_config['imgdir']+'/samples_x0_quantized_row_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(samples_x0_quantized, path)
 
 

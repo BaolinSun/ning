@@ -279,18 +279,24 @@ def save_ddpm_img(log, save_config):
     diffusion_row = log['diffusion_row'].detach()
     samples = log['samples'].detach()
     denoise_row = log['denoise_row'].detach()
+    
+    results = torch.cat([inputs, samples], 0)
 
-    path = save_config['imgdir']+'/inputs_gs-{:06}_e-{:06}_b-{:06}.png'.format(
-        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
-    save_image(inputs, path)
+    path = save_config['imgdir']+'/results_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+    save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(results, path, nrow=inputs.shape[0])
+
+    # path = save_config['imgdir']+'/inputs_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+    #     save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    # save_image(inputs, path)
 
     path = save_config['imgdir']+'/diffusion_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
         save_config['global_step'], save_config['epoch'], save_config['batch_index'])
     save_image(diffusion_row, path)
 
-    path = save_config['imgdir']+'/samples_gs-{:06}_e-{:06}_b-{:06}.png'.format(
-        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
-    save_image(samples, path)
+    # path = save_config['imgdir']+'/samples_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+    #     save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    # save_image(samples, path)
 
     path = save_config['imgdir']+'/denoise_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
         save_config['global_step'], save_config['epoch'], save_config['batch_index'])
@@ -334,5 +340,30 @@ def save_ldm_img(log, save_config):
     path = save_config['imgdir']+'/samples_x0_quantized_row_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
         save_config['global_step'], save_config['epoch'], save_config['batch_index'])
     save_image(samples_x0_quantized, path)
+
+
+def save_cdm_img(log, save_config):
+
+    inputs = log['inputs'].detach()
+    conditioning = log['conditioning'].detach()
+    diffusion_row = log['diffusion_row'].detach()
+    denoise_row = log['denoise_row'].detach()
+    samples = log['samples'].detach()
+
+    results = torch.cat([inputs, conditioning, samples], 0)
+
+    path = save_config['imgdir']+'/results_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+    save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(results, path, nrow=inputs.shape[0])
+
+
+    path = save_config['imgdir']+'/diffusion_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(diffusion_row, path)
+
+    path = save_config['imgdir']+'/denoise_row_row_gs-{:06}_e-{:06}_b-{:06}.png'.format(
+        save_config['global_step'], save_config['epoch'], save_config['batch_index'])
+    save_image(denoise_row, path)
+
 
 

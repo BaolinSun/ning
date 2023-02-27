@@ -358,18 +358,18 @@ class AutoencoderKL(nn.Module):
             # train encoder+decoder+logvar
             aeloss, log_dict_ae = self.loss(inputs, reconstructions, posterior, optimizer_idx, self.global_step,
                                             last_layer=self.get_last_layer(), split="train")
-            self.log("aeloss", aeloss, prog_bar=True, logger=True, on_step=True, on_epoch=True)
-            self.log_dict(log_dict_ae, prog_bar=False, logger=True, on_step=True, on_epoch=False)
-            return aeloss
+            # self.log("aeloss", aeloss, prog_bar=True, logger=True, on_step=True, on_epoch=True)
+            # self.log_dict(log_dict_ae, prog_bar=False, logger=True, on_step=True, on_epoch=False)
+            return aeloss, log_dict_ae
 
         if optimizer_idx == 1:
             # train the discriminator
             discloss, log_dict_disc = self.loss(inputs, reconstructions, posterior, optimizer_idx, self.global_step,
                                                 last_layer=self.get_last_layer(), split="train")
 
-            self.log("discloss", discloss, prog_bar=True, logger=True, on_step=True, on_epoch=True)
-            self.log_dict(log_dict_disc, prog_bar=False, logger=True, on_step=True, on_epoch=False)
-            return discloss
+            # self.log("discloss", discloss, prog_bar=True, logger=True, on_step=True, on_epoch=True)
+            # self.log_dict(log_dict_disc, prog_bar=False, logger=True, on_step=True, on_epoch=False)
+            return discloss, log_dict_disc
 
     def validation_step(self, batch, batch_idx):
         inputs = self.get_input(batch, self.image_key)
@@ -380,10 +380,10 @@ class AutoencoderKL(nn.Module):
         discloss, log_dict_disc = self.loss(inputs, reconstructions, posterior, 1, self.global_step,
                                             last_layer=self.get_last_layer(), split="val")
 
-        self.log("val/rec_loss", log_dict_ae["val/rec_loss"])
-        self.log_dict(log_dict_ae)
-        self.log_dict(log_dict_disc)
-        return self.log_dict
+        # self.log("val/rec_loss", log_dict_ae["val/rec_loss"])
+        # self.log_dict(log_dict_ae)
+        # self.log_dict(log_dict_disc)
+        return aeloss
 
     def configure_optimizers(self):
         lr = self.learning_rate
